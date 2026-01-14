@@ -575,6 +575,202 @@ body {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
+   FLOATING WIDGETS
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Floating Task List - Bottom Right */
+.floating-task-list {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 340px;
+  max-height: 420px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+  overflow: hidden;
+  animation: slideInUp 0.3s ease-out;
+  border: 1px solid rgba(230, 126, 34, 0.3);
+}
+
+.floating-task-list .floating-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.floating-task-list .floating-panel-icon {
+  font-size: 16px;
+}
+
+.floating-task-list .floating-panel-content {
+  padding: 12px;
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+/* Floating Call Control Bar - Bottom Center */
+.floating-call-control {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 420px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.15),
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    0 0 0 2px rgba(231, 76, 60, 0.2);
+  z-index: 1001;
+  overflow: hidden;
+  animation: slideInUp 0.25s ease-out, pulseGlow 2s ease-in-out infinite;
+}
+
+.floating-call-control .call-control-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.floating-call-control .call-indicator {
+  width: 10px;
+  height: 10px;
+  background: #2ecc71;
+  border-radius: 50%;
+  animation: blink 1.2s ease-in-out infinite;
+  box-shadow: 0 0 8px rgba(46, 204, 113, 0.6);
+}
+
+.floating-call-control .call-control-content {
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Animations for floating widgets */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Override for call control which uses translateX */
+.floating-call-control {
+  animation: slideInUpCenter 0.25s ease-out, pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes slideInUpCenter {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.15),
+      0 2px 8px rgba(0, 0, 0, 0.1),
+      0 0 0 2px rgba(231, 76, 60, 0.2);
+  }
+  50% {
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.15),
+      0 2px 8px rgba(0, 0, 0, 0.1),
+      0 0 0 4px rgba(231, 76, 60, 0.15);
+  }
+}
+
+/* Responsive adjustments for floating widgets */
+@media (max-width: 768px) {
+  .floating-task-list {
+    right: 12px;
+    bottom: 12px;
+    width: 300px;
+    max-height: 350px;
+  }
+  
+  .floating-call-control {
+    min-width: 320px;
+    bottom: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .floating-task-list {
+    right: 8px;
+    left: 8px;
+    width: auto;
+    max-height: 300px;
+  }
+  
+  .floating-call-control {
+    left: 8px;
+    right: 8px;
+    transform: none;
+    min-width: auto;
+    animation: slideInUp 0.25s ease-out, pulseGlow 2s ease-in-out infinite;
+  }
+}
+
+/* When both widgets are visible, offset task list above call control */
+.floating-call-control ~ .floating-task-list,
+.floating-task-list:has(~ .floating-call-control) {
+  /* This won't work in all browsers, so we'll use a simpler approach */
+}
+
+/* Scrollbar styling for task list */
+.floating-panel-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.floating-panel-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.floating-panel-content::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.floating-panel-content::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
    MOMENTUM UI THEME OVERRIDES (for widgets)
    ───────────────────────────────────────────────────────────────────────────── */
 .widget-panel .md-button {
@@ -583,4 +779,15 @@ body {
 
 .widget-panel .md-select {
   border-radius: 6px !important;
+}
+
+/* Floating widget overrides */
+.floating-task-list .md-button,
+.floating-call-control .md-button {
+  border-radius: 8px !important;
+}
+
+.floating-call-control .md-button {
+  min-width: 44px;
+  min-height: 44px;
 }

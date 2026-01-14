@@ -1,11 +1,8 @@
 /**
- * ═══════════════════════════════════════════════════════════════════════════
- * COMPLETED VERSION - App.tsx with all widgets integrated
- * ═══════════════════════════════════════════════════════════════════════════
+ * COMPLETED VERSION - All widgets integrated
  * 
- * This is the final version of the CRM application with all Contact Center
- * widgets integrated. Use this as a reference or replace your App.tsx with
- * this file if you want to skip the step-by-step process.
+ * This file shows the final result after completing all 4 steps.
+ * You can replace App.tsx with this file to skip the lab.
  */
 
 import React, { useState } from 'react';
@@ -22,31 +19,21 @@ import {
 } from '@momentum-design/components/dist/react';
 import './App.css';
 
-// Define task type for TypeScript
-interface Task {
-  data: {
-    interactionId: string;
-    mediaType: string;
-  };
-}
+type Task = any;
 
 function App() {
-  // State management
   const [isSdkReady, setIsSdkReady] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [accessToken, setAccessToken] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Configuration for the Webex SDK
   const webexConfig = {
     fedramp: false,
-    logger: {
-      level: 'log',
-    },
+    logger: { level: 'info' },
+    cc: { allowMultiLogin: true },
   };
 
-  // Initialize the Contact Center Widgets SDK
   const initializeWidgets = async () => {
     if (!accessToken.trim()) {
       alert('Please enter your access token first!');
@@ -54,13 +41,13 @@ function App() {
     }
 
     setIsLoading(true);
-    
+
     try {
       await store.init({ webexConfig, access_token: accessToken });
       setIsSdkReady(true);
-      console.log('✅ Widgets initialized successfully!');
+      console.log('Widgets initialized successfully!');
     } catch (error) {
-      console.error('❌ Failed to initialize widgets:', error);
+      console.error('Failed to initialize widgets:', error);
       alert('Failed to initialize widgets. Please check your access token.');
     } finally {
       setIsLoading(false);
@@ -71,10 +58,8 @@ function App() {
     <div className="crm-app">
       <ThemeProvider themeclass="mds-theme-stable-lightWebex">
         <IconProvider iconSet="momentum-icons">
-          
-          {/* ═══════════════════════════════════════════════════════════════
-              CRM HEADER
-              ═══════════════════════════════════════════════════════════════ */}
+
+          {/* CRM HEADER */}
           <header className="crm-header">
             <div className="logo">
               CRM<span>Pro</span>
@@ -90,10 +75,8 @@ function App() {
           </header>
 
           <div className="crm-container">
-            
-            {/* ═══════════════════════════════════════════════════════════════
-                SIDEBAR NAVIGATION
-                ═══════════════════════════════════════════════════════════════ */}
+
+            {/* SIDEBAR */}
             <aside className="crm-sidebar">
               <nav className="nav-menu">
                 <div className="nav-item active">
@@ -119,19 +102,14 @@ function App() {
               </nav>
             </aside>
 
-            {/* ═══════════════════════════════════════════════════════════════
-                MAIN CONTENT AREA
-                ═══════════════════════════════════════════════════════════════ */}
+            {/* MAIN CONTENT */}
             <main className="crm-main">
-              
-              {/* Page Title */}
+
               <div className="page-header">
                 <h1>Dashboard Overview</h1>
               </div>
 
-              {/* ─────────────────────────────────────────────────────────────
-                  AUTHENTICATION SECTION
-                  ───────────────────────────────────────────────────────────── */}
+              {/* AUTHENTICATION */}
               <div className="widget-panel auth-panel">
                 <h3>🔐 Authentication</h3>
                 <p className="panel-description">
@@ -155,108 +133,49 @@ function App() {
                   </button>
                 </div>
                 {isSdkReady && (
-                  <p className="success-message">✅ SDK Ready! You can now use the widgets below.</p>
+                  <p className="success-message">✅ SDK Ready!</p>
                 )}
               </div>
 
-              {/* ─────────────────────────────────────────────────────────────
-                  CONTACT CENTER WIDGETS SECTION
-                  ───────────────────────────────────────────────────────────── */}
+              {/* WIDGETS SECTION */}
               {isSdkReady && (
                 <div className="widgets-section">
                   <h2>📞 Contact Center Widgets</h2>
                   <div className="widgets-grid">
-                    
-                    {/* ═══════════════════════════════════════════════════════
-                        STEP 4: STATION LOGIN WIDGET
-                        ═══════════════════════════════════════════════════════ */}
+
+                    {/* STEP 1: STATION LOGIN */}
                     <div className="widget-panel station-login-panel">
                       <h3>📱 Agent Login</h3>
                       <p className="panel-description">
-                        Login to the Contact Center as an agent to start handling customer interactions.
+                        Login to the Contact Center as an agent.
                       </p>
                       {!isLoggedIn ? (
                         <StationLogin
+                          profileMode={false}
                           onLogin={() => {
                             setIsLoggedIn(true);
-                            console.log('✅ Agent logged in successfully!');
+                            console.log('Agent logged in successfully!');
                           }}
                           onLogout={() => {
                             setIsLoggedIn(false);
-                            console.log('👋 Agent logged out');
+                            console.log('Agent logged out');
                           }}
                         />
                       ) : (
-                        <p className="success-message">✅ You are logged in and ready to receive tasks!</p>
+                        <p className="success-message">✅ You are logged in!</p>
                       )}
                     </div>
 
-                    {/* ═══════════════════════════════════════════════════════
-                        STEP 5: USER STATE WIDGET
-                        ═══════════════════════════════════════════════════════ */}
+                    {/* STEP 2: USER STATE */}
                     {isLoggedIn && (
                       <div className="widget-panel user-state-panel">
                         <h3>🟢 Agent Status</h3>
                         <p className="panel-description">
-                          Set your availability status. Change to "Available" to start receiving tasks.
+                          Set your availability status.
                         </p>
                         <UserState
-                          onStateChange={(status) => {
-                            console.log('🔄 Agent state changed to:', status?.name);
-                          }}
-                        />
-                      </div>
-                    )}
-
-                    {/* ═══════════════════════════════════════════════════════
-                        STEP 6: TASK LIST WIDGET
-                        ═══════════════════════════════════════════════════════ */}
-                    {isLoggedIn && (
-                      <div className="widget-panel task-list-panel">
-                        <h3>📋 Active Tasks</h3>
-                        <p className="panel-description">
-                          View and manage all your active customer interactions here.
-                        </p>
-                        <TaskList
-                          onTaskAccepted={(task) => {
-                            console.log('✅ Task accepted:', task);
-                          }}
-                          onTaskDeclined={(task, reason) => {
-                            console.log('❌ Task declined:', task, 'Reason:', reason);
-                          }}
-                          onTaskSelected={({ task, isClicked }) => {
-                            setSelectedTask(task);
-                            console.log('👆 Task selected:', task?.data?.mediaType);
-                          }}
-                        />
-                      </div>
-                    )}
-
-                    {/* ═══════════════════════════════════════════════════════
-                        STEP 7: CALL CONTROL WIDGET
-                        ═══════════════════════════════════════════════════════ */}
-                    {isLoggedIn && selectedTask && (
-                      <div className="widget-panel call-control-panel">
-                        <h3>📞 Call Controls</h3>
-                        <p className="panel-description">
-                          Control your active call - hold, mute, record, transfer, or end the call.
-                        </p>
-                        <CallControl
-                          onHoldResume={({ isHeld, task }) => {
-                            console.log(isHeld ? '⏸️ Call on hold' : '▶️ Call resumed');
-                          }}
-                          onEnd={({ task }) => {
-                            console.log('📴 Call ended');
-                            setSelectedTask(null);
-                          }}
-                          onWrapUp={(params) => {
-                            console.log('📝 Wrap up completed', params?.wrapUpReason);
-                          }}
-                          onToggleMute={({ isMuted, task }) => {
-                            console.log(isMuted ? '🔇 Call muted' : '🔊 Call unmuted');
-                          }}
-                          onRecordingToggle={({ isRecording, task }) => {
-                            console.log(isRecording ? '🔴 Recording started' : '⏹️ Recording stopped');
+                          onStateChange={(status: any) => {
+                            console.log('Agent state changed to:', status?.name);
                           }}
                         />
                       </div>
@@ -266,9 +185,7 @@ function App() {
                 </div>
               )}
 
-              {/* ─────────────────────────────────────────────────────────────
-                  CRM DASHBOARD STATS
-                  ───────────────────────────────────────────────────────────── */}
+              {/* STATS */}
               <div className="stats-grid">
                 <div className="stat-card stat-blue">
                   <h3>Total Customers</h3>
@@ -304,9 +221,7 @@ function App() {
                 </div>
               </div>
 
-              {/* ─────────────────────────────────────────────────────────────
-                  RECENT CONTACTS TABLE
-                  ───────────────────────────────────────────────────────────── */}
+              {/* TABLE */}
               <div className="table-section">
                 <div className="table-header">
                   <h2>Recent Contacts</h2>
@@ -361,48 +276,67 @@ function App() {
                         <button className="action-btn">Edit</button>
                       </td>
                     </tr>
-                    <tr>
-                      <td>David Kim</td>
-                      <td>Innovation Labs</td>
-                      <td>d.kim@innovlabs.com</td>
-                      <td>(555) 456-7890</td>
-                      <td><span className="status-badge status-active">Active</span></td>
-                      <td>$55,200</td>
-                      <td>
-                        <button className="action-btn">View</button>
-                        <button className="action-btn">Edit</button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Jessica Martinez</td>
-                      <td>CloudTech Systems</td>
-                      <td>j.martinez@cloudtech.com</td>
-                      <td>(555) 567-8901</td>
-                      <td><span className="status-badge status-pending">Pending</span></td>
-                      <td>$28,900</td>
-                      <td>
-                        <button className="action-btn">View</button>
-                        <button className="action-btn">Edit</button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Robert Taylor</td>
-                      <td>DataFlow Inc.</td>
-                      <td>r.taylor@dataflow.com</td>
-                      <td>(555) 678-9012</td>
-                      <td><span className="status-badge status-inactive">Inactive</span></td>
-                      <td>$12,300</td>
-                      <td>
-                        <button className="action-btn">View</button>
-                        <button className="action-btn">Edit</button>
-                      </td>
-                    </tr>
                   </tbody>
                 </table>
               </div>
 
             </main>
           </div>
+
+          {/* STEP 3: FLOATING TASK LIST */}
+          {isLoggedIn && (
+            <div className="floating-task-list">
+              <div className="floating-panel-header">
+                <span className="floating-panel-icon">📋</span>
+                <span>Active Tasks</span>
+              </div>
+              <div className="floating-panel-content">
+                <TaskList
+                  onTaskAccepted={(task: any) => {
+                    console.log('Task accepted:', task);
+                  }}
+                  onTaskDeclined={(task: any, reason: any) => {
+                    console.log('Task declined:', task, 'Reason:', reason);
+                  }}
+                  onTaskSelected={({ task, isClicked }: any) => {
+                    setSelectedTask(task);
+                    console.log('Task selected:', task?.data?.mediaType);
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* STEP 4: FLOATING CALL CONTROL */}
+          {isLoggedIn && selectedTask && (
+            <div className="floating-call-control">
+              <div className="call-control-header">
+                <span className="call-indicator"></span>
+                <span>Active Call</span>
+              </div>
+              <div className="call-control-content">
+                <CallControl
+                  onHoldResume={({ isHeld, task }: any) => {
+                    console.log(isHeld ? 'Call on hold' : 'Call resumed');
+                  }}
+                  onEnd={({ task }: any) => {
+                    console.log('Call ended');
+                    setSelectedTask(null);
+                  }}
+                  onWrapUp={(params: any) => {
+                    console.log('Wrap up completed', params?.wrapUpReason);
+                  }}
+                  onToggleMute={({ isMuted, task }: any) => {
+                    console.log(isMuted ? 'Call muted' : 'Call unmuted');
+                  }}
+                  onRecordingToggle={({ isRecording, task }: any) => {
+                    console.log(isRecording ? 'Recording started' : 'Recording stopped');
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
         </IconProvider>
       </ThemeProvider>
     </div>

@@ -1,142 +1,106 @@
-# 🎯 Contact Center Widgets Integration Lab
+# Contact Center Widgets Integration Lab
 
-> **Audience**: Users who want to integrate Webex Contact Center widgets into their CRM application.
->
-> **Duration**: ~45 minutes
->
-> **What you'll build**: A CRM dashboard with integrated Contact Center capabilities including agent login, state management, task list, and call controls.
-> **Note**: This can be uploaded to the widgets sample app and rendered from there as well
+**Duration**: ~30 minutes
+
+**What you'll build**: A CRM dashboard with integrated Webex Contact Center widgets
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
-1. [Prerequisites & Setup](#-prerequisites--setup)
-2. [Step 1: Clone the Repository](#step-1-clone-the-repository)
-3. [Step 2: Install Dependencies](#step-2-install-dependencies)
-4. [Step 3: Run the Application](#step-3-run-the-application)
-5. [Step 4: Add Station Login Widget](#step-4-add-station-login-widget)
-6. [Step 5: Add User State Widget](#step-5-add-user-state-widget)
-7. [Step 6: Add Task List Widget](#step-6-add-task-list-widget)
-8. [Step 7: Add Call Control Widget](#step-7-add-call-control-widget)
-9. [Complete Code Reference](#-complete-code-reference)
-10. [Troubleshooting](#-troubleshooting)
+1. [Prerequisites](#prerequisites)
+2. [Getting Started](#getting-started)
+3. [Step 1: Station Login Widget](#step-1-station-login-widget)
+4. [Step 2: User State Widget](#step-2-user-state-widget)
+5. [Step 3: Floating Task List Widget](#step-3-floating-task-list-widget)
+6. [Step 4: Floating Call Control Widget](#step-4-floating-call-control-widget)
+7. [Testing Your Integration](#testing-your-integration)
+8. [Troubleshooting](#troubleshooting)
 
 ---
 
-## 🛠 Prerequisites & Setup
+## Prerequisites
 
-### Installing Node.js
+### Required Software
 
-Node.js is required to run this application. Follow these steps:
+- **Node.js v22+** - Download from [nodejs.org](https://nodejs.org)
+- **Code Editor** - VS Code recommended
 
-#### Windows
+### Verify Installation
 
-1. Go to [https://nodejs.org](https://nodejs.org)
-2. Download the **LTS** (Long Term Support) version
-3. Run the installer and follow the prompts
-4. Restart your computer after installation
-
-#### macOS
-
-1. Go to [https://nodejs.org](https://nodejs.org)
-2. Download the **LTS** version
-3. Run the installer and follow the prompts
-4. **OR** use Homebrew: `brew install node`
-
-#### Verify Installation
-
-Open a terminal (Command Prompt on Windows, Terminal on Mac) and run:
+Open your terminal and run:
 
 ```bash
 node --version
 ```
 
-You should see something like `v20.x.x` or higher.
+You should see `v22.x.x` or higher.
 
-```bash
-npm --version
-```
+### Required Credentials
 
-You should see something like `9.x.x` or higher.
-
----
-
-## Step 1: Clone the Repository
-
-Open your terminal and run:
-
-```bash
-git clone https://github.com/webex/cc-widgets-crm-lab.git
-cd cc-widgets-crm-lab
-```
-
-> **Note**: The repository URL will be provided by your instructor.
+- **Webex Access Token** - Get from the [Webex Developer Portal](https://developer.webex.com)
+  - Click your profile icon → Copy access token
 
 ---
 
-## Step 2: Install Dependencies
+## Getting Started
 
-In the same terminal, run:
+### 1. Clone the Repository
+
+```bash
+git clone <repository-url>
+cd cti-wxcc-widgets
+```
+
+### 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-⏳ **Wait** for all dependencies to install. This may take 2-5 minutes.
+> **Note**: If install fails, try: `npm install --ignore-scripts`
 
-You'll see progress bars and eventually a success message.
-
----
-
-## Step 3: Run the Application
-
-Start the development server:
+### 3. Start the Development Server
 
 ```bash
 npm run dev
 ```
 
-🎉 **Success!** Open your browser and go to:
+### 4. Open the Application
 
-```
-http://localhost:5173
-```
+Open your browser and go to: **http://localhost:5173**
 
-You should see a CRM Dashboard. Leave this terminal running!
+You should see a CRM Dashboard with an Authentication panel.
+
+### 5. Initialize the SDK
+
+1. Paste your Webex access token in the Authentication panel
+2. Click **"Initialize Widgets"**
+3. Wait for the **"SDK Ready!"** message
 
 ---
 
-## Step 4: Add Station Login Widget
+## Step 1: Station Login Widget
 
-The **Station Login Widget** allows agents to log into the Contact Center system.
+The Station Login widget allows agents to log into the Contact Center.
 
-### 4.1 Open App.tsx
-
-Open the file `src/App.tsx` in your code editor.
-
-### 4.2 Find the Station Login Section
-
-Look for this comment in the code:
+### Find this comment in `src/App.tsx`:
 
 ```tsx
-{
-  /* TODO: STEP 4 - STATION LOGIN WIDGET */
-}
+{/* TODO: STEP 1 - STATION LOGIN WIDGET */}
 ```
 
-### 4.3 Replace with Widget Code
-
-Copy and paste this code to replace the TODO comment:
+### Replace it with:
 
 ```tsx
-{
-  /* Station Login Widget */
-}
 <div className="widget-panel station-login-panel">
   <h3>📱 Agent Login</h3>
+  <p className="panel-description">
+    Login to the Contact Center as an agent.
+  </p>
   {!isLoggedIn ? (
     <StationLogin
+      profileMode={false}
       onLogin={() => {
         setIsLoggedIn(true);
         console.log('Agent logged in successfully!');
@@ -149,358 +113,240 @@ Copy and paste this code to replace the TODO comment:
   ) : (
     <p className="success-message">✅ You are logged in!</p>
   )}
-</div>;
+</div>
 ```
 
-### 4.4 Save and Check
+### Save and verify:
 
-Save the file. Your browser should auto-refresh and show the Station Login widget!
+- Save the file (Ctrl+S / Cmd+S)
+- The browser will auto-refresh
+- You should see the "Agent Login" panel appear
 
 ---
 
-## Step 5: Add User State Widget
+## Step 2: User State Widget
 
-The **User State Widget** lets agents change their availability status (Available, Idle, etc.).
+The User State widget lets agents change their availability status.
 
-### 5.1 Find the User State Section
-
-Look for this comment in `src/App.tsx`:
+### Find this comment in `src/App.tsx`:
 
 ```tsx
-{
-  /* TODO: STEP 5 - USER STATE WIDGET */
-}
+{/* TODO: STEP 2 - USER STATE WIDGET */}
 ```
 
-### 5.2 Replace with Widget Code
-
-Copy and paste this code:
+### Replace it with:
 
 ```tsx
-{
-  /* User State Widget */
-}
-{
-  isLoggedIn && (
-    <div className="widget-panel user-state-panel">
-      <h3>🟢 Agent Status</h3>
-      <UserState
-        onStateChange={(status) => {
-          console.log('Agent state changed to:', status?.name);
-        }}
-      />
+{isLoggedIn && (
+  <div className="widget-panel user-state-panel">
+    <h3>🟢 Agent Status</h3>
+    <p className="panel-description">
+      Set your availability status.
+    </p>
+    <UserState
+      onStateChange={(status: any) => {
+        console.log('Agent state changed to:', status?.name);
+      }}
+    />
+  </div>
+)}
+```
+
+### Save and verify:
+
+- Save the file
+- Log in using the Station Login widget
+- The "Agent Status" panel should appear after login
+
+---
+
+## Step 3: Floating Task List Widget
+
+The Task List widget shows active customer interactions. It appears as a floating panel in the bottom-right corner.
+
+### Find this comment in `src/App.tsx`:
+
+```tsx
+{/* TODO: STEP 3 - FLOATING TASK LIST WIDGET */}
+```
+
+### Replace it with:
+
+```tsx
+{isLoggedIn && (
+  <div className="floating-task-list">
+    <div className="floating-panel-header">
+      <span className="floating-panel-icon">📋</span>
+      <span>Active Tasks</span>
     </div>
-  );
-}
-```
-
-### 5.3 Save and Check
-
-Save the file. After logging in, you'll see the User State dropdown!
-
----
-
-## Step 6: Add Task List Widget
-
-The **Task List Widget** shows all active tasks/calls assigned to the agent.
-
-### 6.1 Find the Task List Section
-
-Look for this comment in `src/App.tsx`:
-
-```tsx
-{
-  /* TODO: STEP 6 - TASK LIST WIDGET */
-}
-```
-
-### 6.2 Replace with Widget Code
-
-Copy and paste this code:
-
-```tsx
-{
-  /* Task List Widget */
-}
-{
-  isLoggedIn && (
-    <div className="widget-panel task-list-panel">
-      <h3>📋 Active Tasks</h3>
+    <div className="floating-panel-content">
       <TaskList
-        onTaskAccepted={(task) => {
+        onTaskAccepted={(task: any) => {
           console.log('Task accepted:', task);
         }}
-        onTaskDeclined={(task, reason) => {
+        onTaskDeclined={(task: any, reason: any) => {
           console.log('Task declined:', task, 'Reason:', reason);
         }}
-        onTaskSelected={({task, isClicked}) => {
+        onTaskSelected={({ task, isClicked }: any) => {
           setSelectedTask(task);
-          console.log('Task selected:', task);
+          console.log('Task selected:', task?.data?.mediaType);
         }}
       />
     </div>
-  );
-}
+  </div>
+)}
 ```
 
-### 6.3 Save and Check
+### Save and verify:
 
-Save the file. The task list will appear when you're logged in and tasks arrive!
+- Save the file
+- After logging in, a floating panel should appear in the bottom-right corner
+- The panel has an orange header with "Active Tasks"
 
 ---
 
-## Step 7: Add Call Control Widget
+## Step 4: Floating Call Control Widget
 
-The **Call Control Widget** provides buttons to control active calls (hold, mute, transfer, end call, etc.).
+The Call Control widget provides buttons to control active calls. It appears as a floating bar at the bottom-center when there's an active call.
 
-### 7.1 Find the Call Control Section
-
-Look for this comment in `src/App.tsx`:
+### Find this comment in `src/App.tsx`:
 
 ```tsx
-{
-  /* TODO: STEP 7 - CALL CONTROL WIDGET */
-}
+{/* TODO: STEP 4 - FLOATING CALL CONTROL WIDGET */}
 ```
 
-### 7.2 Replace with Widget Code
-
-Copy and paste this code:
+### Replace it with:
 
 ```tsx
-{
-  /* Call Control Widget */
-}
-{
-  isLoggedIn && selectedTask && (
-    <div className="widget-panel call-control-panel">
-      <h3>📞 Call Controls</h3>
+{isLoggedIn && selectedTask && (
+  <div className="floating-call-control">
+    <div className="call-control-header">
+      <span className="call-indicator"></span>
+      <span>Active Call</span>
+    </div>
+    <div className="call-control-content">
       <CallControl
-        onHoldResume={({isHeld, task}) => {
-          console.log(isHeld ? 'Call on hold' : 'Call resumed', task);
+        onHoldResume={({ isHeld, task }: any) => {
+          console.log(isHeld ? 'Call on hold' : 'Call resumed');
         }}
-        onEnd={({task}) => {
-          console.log('Call ended', task);
+        onEnd={({ task }: any) => {
+          console.log('Call ended');
           setSelectedTask(null);
         }}
-        onWrapUp={(params) => {
-          console.log('Wrap up completed', params);
+        onWrapUp={(params: any) => {
+          console.log('Wrap up completed', params?.wrapUpReason);
         }}
-        onToggleMute={({isMuted, task}) => {
-          console.log(isMuted ? 'Call muted' : 'Call unmuted', task);
+        onToggleMute={({ isMuted, task }: any) => {
+          console.log(isMuted ? 'Call muted' : 'Call unmuted');
+        }}
+        onRecordingToggle={({ isRecording, task }: any) => {
+          console.log(isRecording ? 'Recording started' : 'Recording stopped');
         }}
       />
     </div>
-  );
-}
+  </div>
+)}
 ```
 
-### 7.3 Save and Check
+### Save and verify:
 
-Save the file. Call controls will appear when you have an active task!
+- Save the file
+- The Call Control bar will only appear when you have an active call
+- It has a red header with a pulsing green indicator
 
 ---
 
-## 📚 Complete Code Reference
+## Testing Your Integration
 
-Here's what your complete `App.tsx` should look like after all steps:
+### Complete Flow:
 
-```tsx
-import React, {useState, useEffect} from 'react';
-import {StationLogin, UserState, TaskList, CallControl, store} from '@webex/cc-widgets';
-import {ThemeProvider, IconProvider} from '@momentum-design/components/dist/react';
-import './App.css';
+1. **Initialize** - Enter your token and click Initialize
+2. **Login** - Use the Station Login widget to log in
+3. **Set Status** - Change your status to "Available" using User State
+4. **Receive Call** - Wait for an incoming task (or place a test call to your entry point)
+5. **Accept Task** - Click to accept the incoming task in the Task List
+6. **Control Call** - Use the Call Control bar to hold, mute, or end the call
 
-function App() {
-  const [isSdkReady, setIsSdkReady] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [selectedTask, setSelectedTask] = useState(null);
-  const [accessToken, setAccessToken] = useState('');
+### Widget Layout:
 
-  // Initialize the SDK
-  const initializeWidgets = async () => {
-    if (!accessToken.trim()) {
-      alert('Please enter your access token first!');
-      return;
-    }
-
-    const webexConfig = {
-      fedramp: false,
-      logger: {level: 'log'},
-    };
-
-    try {
-      await store.init({webexConfig, access_token: accessToken});
-      setIsSdkReady(true);
-      console.log('Widgets initialized successfully!');
-    } catch (error) {
-      console.error('Failed to initialize widgets:', error);
-    }
-  };
-
-  return (
-    <div className="crm-app">
-      <ThemeProvider themeclass="mds-theme-stable-lightWebex">
-        <IconProvider iconSet="momentum-icons">
-          {/* CRM Header */}
-          <header className="crm-header">
-            <div className="logo">
-              CRM<span>Pro</span>
-            </div>
-            <div className="header-right">
-              <input type="text" className="search-bar" placeholder="Search customers, deals..." />
-            </div>
-          </header>
-
-          <div className="crm-container">
-            {/* Sidebar */}
-            <aside className="crm-sidebar">
-              <nav className="nav-menu">
-                <div className="nav-item active">📊 Dashboard</div>
-                <div className="nav-item">👥 Contacts</div>
-                <div className="nav-item">💼 Deals</div>
-                <div className="nav-item">📈 Reports</div>
-                <div className="nav-item">⚙️ Settings</div>
-              </nav>
-            </aside>
-
-            {/* Main Content */}
-            <main className="crm-main">
-              {/* Authentication Section */}
-              <div className="auth-section">
-                <h2>🔐 Authentication</h2>
-                <div className="token-input">
-                  <input
-                    type="password"
-                    placeholder="Enter your access token"
-                    value={accessToken}
-                    onChange={(e) => setAccessToken(e.target.value)}
-                  />
-                  <button onClick={initializeWidgets} disabled={!accessToken.trim()} className="btn-primary">
-                    Initialize Widgets
-                  </button>
-                </div>
-                {isSdkReady && <p className="success-message">✅ SDK Ready!</p>}
-              </div>
-
-              {/* Widgets Section */}
-              {isSdkReady && (
-                <div className="widgets-grid">
-                  {/* TODO: STEP 4 - STATION LOGIN WIDGET */}
-
-                  {/* TODO: STEP 5 - USER STATE WIDGET */}
-
-                  {/* TODO: STEP 6 - TASK LIST WIDGET */}
-
-                  {/* TODO: STEP 7 - CALL CONTROL WIDGET */}
-                </div>
-              )}
-
-              {/* CRM Dashboard Stats */}
-              <div className="stats-grid">
-                <div className="stat-card">
-                  <h3>Total Customers</h3>
-                  <div className="stat-value">1,284</div>
-                </div>
-                <div className="stat-card">
-                  <h3>Active Deals</h3>
-                  <div className="stat-value">248</div>
-                </div>
-                <div className="stat-card">
-                  <h3>Revenue (MTD)</h3>
-                  <div className="stat-value">$124.5K</div>
-                </div>
-              </div>
-
-              {/* Contacts Table */}
-              <div className="table-section">
-                <h2>Recent Contacts</h2>
-                <table className="data-table">
-                  <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Company</th>
-                      <th>Email</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Sarah Johnson</td>
-                      <td>TechCorp Inc.</td>
-                      <td>sarah.j@techcorp.com</td>
-                      <td>
-                        <span className="status-active">Active</span>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Michael Chen</td>
-                      <td>Digital Solutions</td>
-                      <td>m.chen@digitalsol.com</td>
-                      <td>
-                        <span className="status-pending">Pending</span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </main>
-          </div>
-        </IconProvider>
-      </ThemeProvider>
-    </div>
-  );
-}
-
-export default App;
+```
+┌─────────────────────────────────────────────────────────┐
+│  CRM Header                                             │
+├──────────┬──────────────────────────────────────────────┤
+│          │  [Step 1: Login]    [Step 2: Status]         │
+│ Sidebar  │                                              │
+│          │  Dashboard Stats & Contacts Table            │
+│          │                                              │
+│          │                    ┌─────────────────────┐   │
+│          │                    │  Step 3: Task List  │   │
+│          │                    │  (Bottom-Right)     │   │
+│          │                    └─────────────────────┘   │
+│          │     ┌────────────────────────────────┐       │
+│          │     │  Step 4: Call Control          │       │
+│          │     │  (Bottom-Center)               │       │
+│          │     └────────────────────────────────┘       │
+└──────────┴──────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
-### "npm install" fails
+### npm install fails
 
-1. Make sure you have Node.js installed correctly
-2. Try deleting `node_modules` folder and running `npm install` again
-3. Check your internet connection
+```bash
+# Try with ignore-scripts flag
+npm install --ignore-scripts
+```
 
-### Widgets don't appear
+### Blank page / Nothing renders
 
-1. Make sure you entered a valid access token
-2. Check the browser console (F12) for errors
-3. Ensure you clicked "Initialize Widgets" button
+1. Open browser console (F12)
+2. Check for JavaScript errors
+3. Make sure the dev server is running (`npm run dev`)
 
-### "Access token invalid" error
+### Widgets don't appear after SDK initialization
 
-1. Your token may have expired - get a new one
-2. Make sure you copied the entire token without extra spaces
+1. Check the browser console for errors
+2. Verify your access token is valid and not expired
+3. Make sure you clicked "Initialize Widgets"
 
-### Page is blank
+### TypeScript errors when pasting code
 
-1. Make sure the dev server is running (`npm run dev`)
-2. Check for JavaScript errors in the console (F12)
+Make sure you copied the code exactly as shown, including:
+- The `: any` type annotations on callback parameters
+- The `profileMode={false}` prop on StationLogin
 
----
+### Floating widgets don't show
 
-## 🎓 What You Learned
-
-✅ How to install Node.js and npm  
-✅ How to run a React application  
-✅ How to integrate the **Station Login** widget  
-✅ How to integrate the **User State** widget  
-✅ How to integrate the **Task List** widget  
-✅ How to integrate the **Call Control** widget
+- **Task List**: Only appears after you log in
+- **Call Control**: Only appears when you have an active call (selectedTask is set)
 
 ---
 
-## 📖 Next Steps
+## Reference Files
 
-- Explore the [Webex Contact Center SDK Documentation](https://developer.webex.com)
-- Try customizing the widget styles
+| File | Description |
+|------|-------------|
+| `src/App.tsx` | Starter template with TODO placeholders |
+| `src/App.completed.tsx` | Completed version with all widgets |
+| `src/App.css` | Styles including floating widget styles |
+
+---
+
+## What You Learned
+
+✅ Initialize the Webex Contact Center SDK  
+✅ Add Station Login widget for agent authentication  
+✅ Add User State widget for availability management  
+✅ Add floating Task List widget for viewing interactions  
+✅ Add floating Call Control widget for call management
+
+---
+
+## Next Steps
+
+- Customize widget styles in `App.css`
 - Add more callback handlers for advanced functionality
 - Integrate with your actual CRM backend
-
----
-
-> **Need help?** Contact your workshop instructor or visit the Webex Developer Portal.
+- Explore additional widgets in the [Webex Developer Portal](https://developer.webex.com)
