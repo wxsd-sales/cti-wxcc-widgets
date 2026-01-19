@@ -101,6 +101,24 @@ body {
   transform: scale(1.1);
 }
 
+/* Logout Button */
+.btn-logout {
+  padding: 8px 16px;
+  background: rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+  border: 1px solid #e74c3c;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-logout:hover {
+  background: #e74c3c;
+  color: white;
+}
+
 /* ─────────────────────────────────────────────────────────────────────────────
    SIDEBAR
    ───────────────────────────────────────────────────────────────────────────── */

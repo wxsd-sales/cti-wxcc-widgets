@@ -122,6 +122,8 @@ The Station Login widget allows agents to log into the Contact Center.
 - The browser will auto-refresh
 - You should see the "Agent Login" panel appear
 
+> **Note**: Once logged in, a **Logout** button will appear in the header (top-right) allowing you to log out at any time.
+
 ---
 
 ## Step 2: User State Widget
@@ -266,6 +268,7 @@ The Call Control widget provides buttons to control active calls. It appears as 
 4. **Receive Call** - Wait for an incoming task (or place a test call to your entry point)
 5. **Accept Task** - Click to accept the incoming task in the Task List
 6. **Control Call** - Use the Call Control bar to hold, mute, or end the call
+7. **Logout** - Click the Logout button in the header when finished
 
 ### Widget Layout:
 
@@ -341,6 +344,36 @@ Make sure you copied the code exactly as shown, including:
 ✅ Add User State widget for availability management  
 ✅ Add floating Task List widget for viewing interactions  
 ✅ Add floating Call Control widget for call management
+
+---
+
+## Bonus: Understanding the Logout Function
+
+The logout button in the header uses the following function (already included in the starter code):
+
+```tsx
+// Station Logout function
+const handleStationLogout = () => {
+  store.cc
+    .stationLogout({ logoutReason: 'User requested logout' })
+    .then((response: any) => {
+      if ('data' in response) {
+        console.log('Agent logged out successfully', response.data);
+        setIsLoggedIn(false);
+        setSelectedTask(null);
+      }
+    })
+    .catch((error: any) => {
+      console.error('Agent logout failed', error);
+    });
+};
+```
+
+This function:
+- Calls `store.cc.stationLogout()` with a logout reason
+- Resets the `isLoggedIn` state on success
+- Clears any selected task
+- Logs errors if logout fails
 
 ---
 

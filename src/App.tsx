@@ -55,6 +55,22 @@ function App() {
     }
   };
 
+  // Station Logout function
+  const handleStationLogout = () => {
+    store.cc
+      .stationLogout({ logoutReason: 'User requested logout' })
+      .then((response: any) => {
+        if ('data' in response) {
+          console.log('Agent logged out successfully', response.data);
+          setIsLoggedIn(false);
+          setSelectedTask(null);
+        }
+      })
+      .catch((error: any) => {
+        console.error('Agent logout failed', error);
+      });
+  };
+
   return (
     <div className="crm-app">
       <ThemeProvider themeclass="mds-theme-stable-lightWebex">
@@ -71,6 +87,11 @@ function App() {
                 className="search-bar"
                 placeholder="Search customers, deals..."
               />
+              {isLoggedIn && (
+                <button className="btn-logout" onClick={handleStationLogout}>
+                  🚪 Logout
+                </button>
+              )}
               <div className="user-avatar">JD</div>
             </div>
           </header>
