@@ -13,12 +13,7 @@ import {
 import './App.css';
 
 // Define task type for TypeScript
-interface Task {
-  data: {
-    interactionId: string;
-    mediaType: string;
-  };
-}
+type Task = any;
 
 function App() {
   // State management
@@ -47,27 +42,41 @@ function App() {
     }
 
     setIsLoading(true);
-    
+
     try {
       await store.init({ webexConfig, access_token: accessToken });
       setIsSdkReady(true);
-      console.log('✅ Widgets initialized successfully!');
+      console.log('Widgets initialized successfully!');
     } catch (error) {
-      console.error('❌ Failed to initialize widgets:', error);
+      console.error('Failed to initialize widgets:', error);
       alert('Failed to initialize widgets. Please check your access token.');
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Station Logout function
+  const handleStationLogout = () => {
+    store.cc
+      .stationLogout({ logoutReason: 'User requested logout' })
+      .then((response: any) => {
+        if ('data' in response) {
+          console.log('Agent logged out successfully', response.data);
+          setIsLoggedIn(false);
+          setSelectedTask(null);
+        }
+      })
+      .catch((error: any) => {
+        console.error('Agent logout failed', error);
+      });
+  };
+
   return (
     <div className="crm-app">
       <ThemeProvider themeclass="mds-theme-stable-lightWebex">
         <IconProvider iconSet="momentum-icons">
-          
-          {/* ═══════════════════════════════════════════════════════════════
-              CRM HEADER
-              ═══════════════════════════════════════════════════════════════ */}
+
+          {/* CRM HEADER */}
           <header className="crm-header">
             <div className="logo">
               CRM<span>Pro</span>
@@ -78,15 +87,18 @@ function App() {
                 className="search-bar"
                 placeholder="Search customers, deals..."
               />
+              {isLoggedIn && (
+                <button className="btn-logout" onClick={handleStationLogout}>
+                  🚪 Logout
+                </button>
+              )}
               <div className="user-avatar">JD</div>
             </div>
           </header>
 
           <div className="crm-container">
-            
-            {/* ═══════════════════════════════════════════════════════════════
-                SIDEBAR NAVIGATION
-                ═══════════════════════════════════════════════════════════════ */}
+
+            {/* SIDEBAR NAVIGATION */}
             <aside className="crm-sidebar">
               <nav className="nav-menu">
                 <div className="nav-item active">
@@ -112,19 +124,15 @@ function App() {
               </nav>
             </aside>
 
-            {/* ═══════════════════════════════════════════════════════════════
-                MAIN CONTENT AREA
-                ═══════════════════════════════════════════════════════════════ */}
+            {/* MAIN CONTENT AREA */}
             <main className="crm-main">
-              
+
               {/* Page Title */}
               <div className="page-header">
                 <h1>Dashboard Overview</h1>
               </div>
 
-              {/* ─────────────────────────────────────────────────────────────
-                  AUTHENTICATION SECTION
-                  ───────────────────────────────────────────────────────────── */}
+              {/* AUTHENTICATION SECTION */}
               <div className="widget-panel auth-panel">
                 <h3>🔐 Authentication</h3>
                 <p className="panel-description">
@@ -152,116 +160,21 @@ function App() {
                 )}
               </div>
 
-              {/* ─────────────────────────────────────────────────────────────
-                  CONTACT CENTER WIDGETS SECTION
-                  ───────────────────────────────────────────────────────────── */}
+              {/* CONTACT CENTER WIDGETS SECTION */}
               {isSdkReady && (
                 <div className="widgets-section">
                   <h2>📞 Contact Center Widgets</h2>
                   <div className="widgets-grid">
-                    
-                    {/* ═══════════════════════════════════════════════════════
-                        STEP 4: STATION LOGIN WIDGET
-                        ═══════════════════════════════════════════════════════ */}
-                    <div className="widget-panel station-login-panel">
-                      <h3>📱 Agent Login</h3>
-                      <p className="panel-description">
-                        Login to the Contact Center as an agent to start handling customer interactions.
-                      </p>
-                      {!isLoggedIn ? (
-                        <StationLogin
-                          onLogin={() => {
-                            setIsLoggedIn(true);
-                            console.log('✅ Agent logged in successfully!');
-                          }}
-                          onLogout={() => {
-                            setIsLoggedIn(false);
-                            console.log('👋 Agent logged out');
-                          }}
-                        />
-                      ) : (
-                        <p className="success-message">✅ You are logged in and ready to receive tasks!</p>
-                      )}
-                    </div>
-                    
-                    {/* ═══════════════════════════════════════════════════════
-                        STEP 5: USER STATE WIDGET
-                        ═══════════════════════════════════════════════════════ */}
-                    {isLoggedIn && (
-                      <div className="widget-panel user-state-panel">
-                        <h3>🟢 Agent Status</h3>
-                        <p className="panel-description">
-                          Set your availability status. Change to "Available" to start receiving tasks.
-                        </p>
-                        <UserState
-                          onStateChange={(status) => {
-                            console.log('🔄 Agent state changed to:', status?.name);
-                          }}
-                        />
-                      </div>
-                    )}
-                    
-                    {/* ═══════════════════════════════════════════════════════
-                        STEP 6: TASK LIST WIDGET
-                        ═══════════════════════════════════════════════════════ */}
-                    {isLoggedIn && (
-                      <div className="widget-panel task-list-panel">
-                        <h3>📋 Active Tasks</h3>
-                        <p className="panel-description">
-                          View and manage all your active customer interactions here.
-                        </p>
-                        <TaskList
-                          onTaskAccepted={(task) => {
-                            console.log('✅ Task accepted:', task);
-                          }}
-                          onTaskDeclined={(task, reason) => {
-                            console.log('❌ Task declined:', task, 'Reason:', reason);
-                          }}
-                          onTaskSelected={({ task, isClicked }) => {
-                            setSelectedTask(task);
-                            console.log('👆 Task selected:', task?.data?.mediaType);
-                          }}
-                        />
-                      </div>
-                    )}
-                    
-                    {/* ═══════════════════════════════════════════════════════
-                        STEP 7: CALL CONTROL WIDGET
-                        ═══════════════════════════════════════════════════════ */}
-                    {isLoggedIn && selectedTask && (
-                      <div className="widget-panel call-control-panel">
-                        <h3>📞 Call Controls</h3>
-                        <p className="panel-description">
-                          Control your active call - hold, mute, record, transfer, or end the call.
-                        </p>
-                        <CallControl
-                          onHoldResume={({ isHeld, task }) => {
-                            console.log(isHeld ? '⏸️ Call on hold' : '▶️ Call resumed');
-                          }}
-                          onEnd={({ task }) => {
-                            console.log('📴 Call ended');
-                            setSelectedTask(null);
-                          }}
-                          onWrapUp={(params) => {
-                            console.log('📝 Wrap up completed', params?.wrapUpReason);
-                          }}
-                          onToggleMute={({ isMuted, task }) => {
-                            console.log(isMuted ? '🔇 Call muted' : '🔊 Call unmuted');
-                          }}
-                          onRecordingToggle={({ isRecording, task }) => {
-                            console.log(isRecording ? '🔴 Recording started' : '⏹️ Recording stopped');
-                          }}
-                        />
-                      </div>
-                    )}
+
+                    {/* TODO: STEP 1 - STATION LOGIN WIDGET */}
+
+                    {/* TODO: STEP 2 - USER STATE WIDGET */}
 
                   </div>
                 </div>
               )}
 
-              {/* ─────────────────────────────────────────────────────────────
-                  CRM DASHBOARD STATS
-                  ───────────────────────────────────────────────────────────── */}
+              {/* CRM DASHBOARD STATS */}
               <div className="stats-grid">
                 <div className="stat-card stat-blue">
                   <h3>Total Customers</h3>
@@ -297,9 +210,7 @@ function App() {
                 </div>
               </div>
 
-              {/* ─────────────────────────────────────────────────────────────
-                  RECENT CONTACTS TABLE
-                  ───────────────────────────────────────────────────────────── */}
+              {/* RECENT CONTACTS TABLE */}
               <div className="table-section">
                 <div className="table-header">
                   <h2>Recent Contacts</h2>
@@ -396,6 +307,13 @@ function App() {
 
             </main>
           </div>
+
+          {/* FLOATING WIDGETS SECTION */}
+
+          {/* TODO: STEP 3 - FLOATING TASK LIST WIDGET */}
+
+          {/* TODO: STEP 4 - FLOATING CALL CONTROL WIDGET */}
+
         </IconProvider>
       </ThemeProvider>
     </div>
