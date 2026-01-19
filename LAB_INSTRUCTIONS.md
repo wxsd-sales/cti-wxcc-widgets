@@ -232,11 +232,11 @@ The Call Control widget provides buttons to control active calls. It appears as 
           console.log(isHeld ? 'Call on hold' : 'Call resumed');
         }}
         onEnd={({ task }: any) => {
-          console.log('Call ended');
-          setSelectedTask(null);
+          console.log('Call ended - waiting for wrapup');
         }}
         onWrapUp={(params: any) => {
           console.log('Wrap up completed', params?.wrapUpReason);
+          setSelectedTask(null);
         }}
         onToggleMute={({ isMuted, task }: any) => {
           console.log(isMuted ? 'Call muted' : 'Call unmuted');
@@ -253,8 +253,9 @@ The Call Control widget provides buttons to control active calls. It appears as 
 ### Save and verify:
 
 - Save the file
-- The Call Control bar will only appear when you have an active call
-- It has a red header with a pulsing green indicator
+- The Call Control bar appears when you have an active call
+- **Important**: The widget stays visible during wrapup phase (after call ends)
+- It only hides after wrapup is completed
 
 ---
 
