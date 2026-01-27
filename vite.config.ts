@@ -15,5 +15,17 @@ export default defineConfig({
   server: {
     port: 5173,
     open: true,
+    host: true, // Allow access from any host (needed for web IDEs)
+    // Allow requests from web IDE hosts
+    allowedHosts: [
+      '.csb.app',           // CodeSandbox
+      '.gitpod.io',         // Gitpod
+      '.github.dev',        // GitHub Codespaces
+      '.githubpreview.dev', // GitHub Codespaces preview
+      '.preview.app.github.dev', // GitHub Codespaces
+      '.app.github.dev',    // GitHub Codespaces
+      '.stackblitz.io',     // StackBlitz
+      'localhost',          // Local development
+    ],
   },
 });
