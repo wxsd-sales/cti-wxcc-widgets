@@ -22,6 +22,7 @@ function App() {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [accessToken, setAccessToken] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isCtiPanelOpen, setIsCtiPanelOpen] = useState(true);
 
   // Configuration for the Webex SDK
   const webexConfig = {
@@ -87,11 +88,6 @@ function App() {
                 className="search-bar"
                 placeholder="Search customers, deals..."
               />
-              {isLoggedIn && (
-                <button className="btn-logout" onClick={handleStationLogout}>
-                  🚪 Logout
-                </button>
-              )}
               <div className="user-avatar">JD</div>
             </div>
           </header>
@@ -131,48 +127,6 @@ function App() {
               <div className="page-header">
                 <h1>Dashboard Overview</h1>
               </div>
-
-              {/* AUTHENTICATION SECTION */}
-              <div className="widget-panel auth-panel">
-                <h3>🔐 Authentication</h3>
-                <p className="panel-description">
-                  Enter your Webex access token to initialize the Contact Center widgets.
-                </p>
-                <div className="token-input-group">
-                  <input
-                    type="password"
-                    className="token-input"
-                    placeholder="Paste your access token here..."
-                    value={accessToken}
-                    onChange={(e) => setAccessToken(e.target.value)}
-                    disabled={isSdkReady}
-                  />
-                  <button
-                    onClick={initializeWidgets}
-                    disabled={!accessToken.trim() || isSdkReady || isLoading}
-                    className="btn-primary"
-                  >
-                    {isLoading ? '⏳ Initializing...' : isSdkReady ? '✅ Initialized' : '🚀 Initialize Widgets'}
-                  </button>
-                </div>
-                {isSdkReady && (
-                  <p className="success-message">✅ SDK Ready! You can now use the widgets below.</p>
-                )}
-              </div>
-
-              {/* CONTACT CENTER WIDGETS SECTION */}
-              {isSdkReady && (
-                <div className="widgets-section">
-                  <h2>📞 Contact Center Widgets</h2>
-                  <div className="widgets-grid">
-
-                    {/* TODO: STEP 1 - STATION LOGIN WIDGET */}
-
-                    {/* TODO: STEP 2 - USER STATE WIDGET */}
-
-                  </div>
-                </div>
-              )}
 
               {/* CRM DASHBOARD STATS */}
               <div className="stats-grid">
@@ -308,10 +262,93 @@ function App() {
             </main>
           </div>
 
-          {/* FLOATING WIDGETS SECTION */}
+          {/* ═══════════════════════════════════════════════════════════════════
+              CTI PANEL - Bottom Left Popover
+              Contains: Auth, Station Login, User State, Task List
+              ═══════════════════════════════════════════════════════════════════ */}
+          <div className={`cti-panel ${isCtiPanelOpen ? 'open' : 'collapsed'}`}>
+            
+            {/* CTI Panel Header - Always visible */}
+            <div className="cti-panel-header" onClick={() => setIsCtiPanelOpen(!isCtiPanelOpen)}>
+              <div className="cti-header-left">
+                <span className="cti-icon">📞</span>
+                <span className="cti-title">Contact Center</span>
+                {isLoggedIn && <span className="cti-status-dot"></span>}
+              </div>
+              <button className="cti-toggle-btn">
+                {isCtiPanelOpen ? '▼' : '▲'}
+              </button>
+            </div>
 
-          {/* TODO: STEP 3 - FLOATING TASK LIST WIDGET */}
+            {/* CTI Panel Content - Collapsible */}
+            {isCtiPanelOpen && (
+              <div className="cti-panel-content">
 
+                {/* Authentication Section */}
+                {!isSdkReady ? (
+                  <div className="cti-section">
+                    <div className="cti-section-title">🔐 Connect</div>
+                    <input
+                      type="password"
+                      className="cti-token-input"
+                      placeholder="Paste access token..."
+                      value={accessToken}
+                      onChange={(e) => setAccessToken(e.target.value)}
+                    />
+                    <button
+                      onClick={initializeWidgets}
+                      disabled={!accessToken.trim() || isLoading}
+                      className="cti-btn-primary"
+                    >
+                      {isLoading ? 'Connecting...' : 'Connect'}
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    {/* Station Login Section */}
+                    <div className="cti-section">
+                      {!isLoggedIn ? (
+                        <>
+                          <div className="cti-section-title">📱 Station Login</div>
+                          {/* TODO: STEP 1 - STATION LOGIN WIDGET */}
+                        </>
+                      ) : (
+                        <div className="cti-logged-in-bar">
+                          <span className="cti-status-indicator"></span>
+                          <span>Logged In</span>
+                          <button className="cti-btn-logout" onClick={handleStationLogout}>
+                            Logout
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* User State Section */}
+                    {isLoggedIn && (
+                      <div className="cti-section">
+                        <div className="cti-section-title">🟢 Status</div>
+                        {/* TODO: STEP 2 - USER STATE WIDGET */}
+                      </div>
+                    )}
+
+                    {/* Task List Section */}
+                    {isLoggedIn && (
+                      <div className="cti-section cti-task-section">
+                        <div className="cti-section-title">📋 Tasks</div>
+                        {/* TODO: STEP 3 - TASK LIST WIDGET */}
+                      </div>
+                    )}
+                  </>
+                )}
+
+              </div>
+            )}
+          </div>
+
+          {/* ═══════════════════════════════════════════════════════════════════
+              FLOATING CALL CONTROL - Bottom Center (during active calls)
+              ═══════════════════════════════════════════════════════════════════ */}
+          
           {/* TODO: STEP 4 - FLOATING CALL CONTROL WIDGET */}
 
         </IconProvider>
