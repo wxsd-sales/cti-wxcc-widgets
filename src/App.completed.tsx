@@ -1,8 +1,8 @@
 /**
- * COMPLETED VERSION - All widgets integrated
+ * COMPLETED VERSION - All widgets integrated in CTI Panel
  * 
- * This file shows the final result after completing all 4 steps.
- * You can replace App.tsx with this file to skip the lab.
+ * This file shows the final result after completing all steps.
+ * The widgets are organized in a CTI panel on the bottom-left.
  */
 
 import React, { useState } from 'react';
@@ -27,6 +27,7 @@ function App() {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [accessToken, setAccessToken] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isCtiPanelOpen, setIsCtiPanelOpen] = useState(true);
 
   const webexConfig = {
     fedramp: false,
@@ -54,7 +55,6 @@ function App() {
     }
   };
 
-  // Station Logout function
   const handleStationLogout = () => {
     store.cc
       .stationLogout({ logoutReason: 'User requested logout' })
@@ -86,11 +86,6 @@ function App() {
                 className="search-bar"
                 placeholder="Search customers, deals..."
               />
-              {isLoggedIn && (
-                <button className="btn-logout" onClick={handleStationLogout}>
-                  🚪 Logout
-                </button>
-              )}
               <div className="user-avatar">JD</div>
             </div>
           </header>
@@ -129,82 +124,6 @@ function App() {
               <div className="page-header">
                 <h1>Dashboard Overview</h1>
               </div>
-
-              {/* AUTHENTICATION */}
-              <div className="widget-panel auth-panel">
-                <h3>🔐 Authentication</h3>
-                <p className="panel-description">
-                  Enter your Webex access token to initialize the Contact Center widgets.
-                </p>
-                <div className="token-input-group">
-                  <input
-                    type="password"
-                    className="token-input"
-                    placeholder="Paste your access token here..."
-                    value={accessToken}
-                    onChange={(e) => setAccessToken(e.target.value)}
-                    disabled={isSdkReady}
-                  />
-                  <button
-                    onClick={initializeWidgets}
-                    disabled={!accessToken.trim() || isSdkReady || isLoading}
-                    className="btn-primary"
-                  >
-                    {isLoading ? '⏳ Initializing...' : isSdkReady ? '✅ Initialized' : '🚀 Initialize Widgets'}
-                  </button>
-                </div>
-                {isSdkReady && (
-                  <p className="success-message">✅ SDK Ready!</p>
-                )}
-              </div>
-
-              {/* WIDGETS SECTION */}
-              {isSdkReady && (
-                <div className="widgets-section">
-                  <h2>📞 Contact Center Widgets</h2>
-                  <div className="widgets-grid">
-
-                    {/* STEP 1: STATION LOGIN */}
-                    <div className="widget-panel station-login-panel">
-                      <h3>📱 Agent Login</h3>
-                      <p className="panel-description">
-                        Login to the Contact Center as an agent.
-                      </p>
-                      {!isLoggedIn ? (
-                        <StationLogin
-                          profileMode={false}
-                          onLogin={() => {
-                            setIsLoggedIn(true);
-                            console.log('Agent logged in successfully!');
-                          }}
-                          onLogout={() => {
-                            setIsLoggedIn(false);
-                            console.log('Agent logged out');
-                          }}
-                        />
-                      ) : (
-                        <p className="success-message">✅ You are logged in!</p>
-                      )}
-                    </div>
-
-                    {/* STEP 2: USER STATE */}
-                    {isLoggedIn && (
-                      <div className="widget-panel user-state-panel">
-                        <h3>🟢 Agent Status</h3>
-                        <p className="panel-description">
-                          Set your availability status.
-                        </p>
-                        <UserState
-                          onStateChange={(status: any) => {
-                            console.log('Agent state changed to:', status?.name);
-                          }}
-                        />
-                      </div>
-                    )}
-
-                  </div>
-                </div>
-              )}
 
               {/* STATS */}
               <div className="stats-grid">
@@ -304,31 +223,110 @@ function App() {
             </main>
           </div>
 
-          {/* STEP 3: FLOATING TASK LIST */}
-          {isLoggedIn && (
-            <div className="floating-task-list">
-              <div className="floating-panel-header">
-                <span className="floating-panel-icon">📋</span>
-                <span>Active Tasks</span>
+          {/* CTI PANEL - Bottom Left */}
+          <div className={`cti-panel ${isCtiPanelOpen ? 'open' : 'collapsed'}`}>
+            
+            <div className="cti-panel-header" onClick={() => setIsCtiPanelOpen(!isCtiPanelOpen)}>
+              <div className="cti-header-left">
+                <span className="cti-icon">📞</span>
+                <span className="cti-title">Contact Center</span>
+                {isLoggedIn && <span className="cti-status-dot"></span>}
               </div>
-              <div className="floating-panel-content">
-                <TaskList
-                  onTaskAccepted={(task: any) => {
-                    console.log('Task accepted:', task);
-                  }}
-                  onTaskDeclined={(task: any, reason: any) => {
-                    console.log('Task declined:', task, 'Reason:', reason);
-                  }}
-                  onTaskSelected={({ task, isClicked }: any) => {
-                    setSelectedTask(task);
-                    console.log('Task selected:', task?.data?.mediaType);
-                  }}
-                />
-              </div>
+              <button className="cti-toggle-btn">
+                {isCtiPanelOpen ? '▼' : '▲'}
+              </button>
             </div>
-          )}
 
-          {/* STEP 4: FLOATING CALL CONTROL */}
+            {isCtiPanelOpen && (
+              <div className="cti-panel-content">
+
+                {/* Authentication */}
+                {!isSdkReady ? (
+                  <div className="cti-section">
+                    <div className="cti-section-title">🔐 Connect</div>
+                    <input
+                      type="password"
+                      className="cti-token-input"
+                      placeholder="Paste access token..."
+                      value={accessToken}
+                      onChange={(e) => setAccessToken(e.target.value)}
+                    />
+                    <button
+                      onClick={initializeWidgets}
+                      disabled={!accessToken.trim() || isLoading}
+                      className="cti-btn-primary"
+                    >
+                      {isLoading ? 'Connecting...' : 'Connect'}
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    {/* Station Login */}
+                    <div className="cti-section">
+                      {!isLoggedIn ? (
+                        <>
+                          <div className="cti-section-title">📱 Station Login</div>
+                          <StationLogin
+                            profileMode={false}
+                            onLogin={() => {
+                              setIsLoggedIn(true);
+                              console.log('Agent logged in successfully!');
+                            }}
+                            onLogout={() => {
+                              setIsLoggedIn(false);
+                              console.log('Agent logged out');
+                            }}
+                          />
+                        </>
+                      ) : (
+                        <div className="cti-logged-in-bar">
+                          <span className="cti-status-indicator"></span>
+                          <span>Logged In</span>
+                          <button className="cti-btn-logout" onClick={handleStationLogout}>
+                            Logout
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* User State */}
+                    {isLoggedIn && (
+                      <div className="cti-section">
+                        <div className="cti-section-title">🟢 Status</div>
+                        <UserState
+                          onStateChange={(status: any) => {
+                            console.log('Agent state changed to:', status?.name);
+                          }}
+                        />
+                      </div>
+                    )}
+
+                    {/* Task List */}
+                    {isLoggedIn && (
+                      <div className="cti-section cti-task-section">
+                        <div className="cti-section-title">📋 Tasks</div>
+                        <TaskList
+                          onTaskAccepted={(task: any) => {
+                            console.log('Task accepted:', task);
+                          }}
+                          onTaskDeclined={(task: any, reason: any) => {
+                            console.log('Task declined:', task, 'Reason:', reason);
+                          }}
+                          onTaskSelected={({ task, isClicked }: any) => {
+                            setSelectedTask(task);
+                            console.log('Task selected:', task?.data?.mediaType);
+                          }}
+                        />
+                      </div>
+                    )}
+                  </>
+                )}
+
+              </div>
+            )}
+          </div>
+
+          {/* FLOATING CALL CONTROL - Bottom Center */}
           {isLoggedIn && selectedTask && (
             <div className="floating-call-control">
               <div className="call-control-header">

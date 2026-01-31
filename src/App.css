@@ -593,10 +593,217 @@ body {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
+   CTI PANEL - Bottom Left Popover
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.cti-panel {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  width: 320px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.15),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(52, 152, 219, 0.2);
+}
+
+.cti-panel.collapsed {
+  width: 200px;
+}
+
+/* CTI Panel Header */
+.cti-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  color: white;
+  cursor: pointer;
+  user-select: none;
+}
+
+.cti-panel-header:hover {
+  background: linear-gradient(135deg, #34495e 0%, #3d566e 100%);
+}
+
+.cti-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cti-icon {
+  font-size: 18px;
+}
+
+.cti-title {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.cti-status-dot {
+  width: 8px;
+  height: 8px;
+  background: #2ecc71;
+  border-radius: 50%;
+  animation: blink 1.5s ease-in-out infinite;
+}
+
+.cti-toggle-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.cti-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* CTI Panel Content */
+.cti-panel-content {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+/* CTI Sections */
+.cti-section {
+  padding: 16px;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.cti-section:last-child {
+  border-bottom: none;
+}
+
+.cti-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #7f8c8d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+/* CTI Token Input */
+.cti-token-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #ecf0f1;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 10px;
+  transition: border-color 0.2s;
+}
+
+.cti-token-input:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+/* CTI Buttons */
+.cti-btn-primary {
+  width: 100%;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cti-btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.cti-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* CTI Logged In Bar */
+.cti-logged-in-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #d4edda;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #155724;
+}
+
+.cti-status-indicator {
+  width: 8px;
+  height: 8px;
+  background: #27ae60;
+  border-radius: 50%;
+}
+
+.cti-btn-logout {
+  margin-left: auto;
+  padding: 6px 12px;
+  background: transparent;
+  color: #e74c3c;
+  border: 1px solid #e74c3c;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cti-btn-logout:hover {
+  background: #e74c3c;
+  color: white;
+}
+
+/* CTI Task Section */
+.cti-task-section {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* CTI Panel Scrollbar */
+.cti-panel-content::-webkit-scrollbar,
+.cti-task-section::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cti-panel-content::-webkit-scrollbar-track,
+.cti-task-section::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.cti-panel-content::-webkit-scrollbar-thumb,
+.cti-task-section::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.cti-panel-content::-webkit-scrollbar-thumb:hover,
+.cti-task-section::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
    FLOATING WIDGETS
    ───────────────────────────────────────────────────────────────────────────── */
 
-/* Floating Task List - Bottom Right */
+/* Floating Task List - No longer used, tasks are in CTI panel */
 .floating-task-list {
   position: fixed;
   bottom: 24px;
