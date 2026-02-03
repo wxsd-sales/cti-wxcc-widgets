@@ -18,4 +18,3 @@ import process from 'process';
 if (!(globalThis as any).process) {
   (globalThis as any).process = process;
 }
-
