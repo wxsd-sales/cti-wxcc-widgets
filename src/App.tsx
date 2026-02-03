@@ -75,7 +75,12 @@ function App() {
   return (
     <div className="crm-app">
       <ThemeProvider themeclass="mds-theme-stable-lightWebex">
-        <IconProvider iconSet="momentum-icons">
+        <IconProvider
+          iconSet="custom-icons"
+          url="https://cdn.jsdelivr.net/npm/@momentum-design/icons@0.17.0/dist/svg"
+          fileExtension="svg"
+          cacheStrategy="in-memory-cache"
+        >
 
           {/* CRM HEADER */}
           <header className="crm-header">

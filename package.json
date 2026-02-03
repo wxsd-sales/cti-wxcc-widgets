@@ -16,8 +16,10 @@
     "@momentum-design/components": "0.53.8",
     "@momentum-ui/react-collaboration": "26.201.9",
     "@webex/cc-widgets": "1.28.0-next.3",
+    "buffer": "^6.0.3",
     "mobx": "^6.12.0",
     "mobx-react-lite": "^4.0.5",
+    "process": "^0.11.10",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "webex": "^3.9.0"
