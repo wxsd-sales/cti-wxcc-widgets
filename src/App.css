@@ -600,7 +600,8 @@ body {
   position: fixed;
   bottom: 24px;
   left: 24px;
-  width: 320px;
+  width: 400px;
+  max-width: calc(100vw - 48px);
   background: white;
   border-radius: 16px;
   box-shadow: 
@@ -613,7 +614,7 @@ body {
 }
 
 .cti-panel.collapsed {
-  width: 200px;
+  width: 220px;
 }
 
 /* CTI Panel Header */
@@ -672,8 +673,9 @@ body {
 
 /* CTI Panel Content */
 .cti-panel-content {
-  max-height: 500px;
+  max-height: 600px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* CTI Sections */
@@ -693,6 +695,31 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 12px;
+}
+
+/* Widget containers within CTI panel */
+.cti-section > * {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Ensure widgets don't overflow */
+.cti-section cc-station-login,
+.cti-section cc-user-state,
+.cti-section cc-task-list,
+.cti-section cc-incoming-task {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Fix for Momentum UI widgets inside CTI panel */
+.cti-section :global(.md-button),
+.cti-section :global(.md-select),
+.cti-section :global(mdc-button) {
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* CTI Token Input */
@@ -773,8 +800,49 @@ body {
 
 /* CTI Task Section */
 .cti-task-section {
-  max-height: 200px;
+  max-height: 300px;
   overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px;
+}
+
+/* Ensure task list items don't overflow */
+.cti-task-section cc-task-list {
+  display: block;
+  width: 100%;
+}
+
+/* Fix for incoming task widget buttons */
+.cti-section cc-incoming-task {
+  display: block;
+  min-height: 120px;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .cti-panel {
+    width: 360px;
+    max-width: calc(100vw - 32px);
+    left: 16px;
+    bottom: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cti-panel {
+    width: 320px;
+    max-width: calc(100vw - 24px);
+    left: 12px;
+    bottom: 12px;
+  }
+  
+  .cti-panel-content {
+    max-height: 400px;
+  }
+  
+  .cti-task-section {
+    max-height: 200px;
+  }
 }
 
 /* CTI Panel Scrollbar */
@@ -1015,4 +1083,81 @@ body {
 .floating-call-control .md-button {
   min-width: 44px;
   min-height: 44px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   CTI PANEL WIDGET FIXES
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Force widgets to respect container width */
+.cti-panel cc-station-login,
+.cti-panel cc-user-state,
+.cti-panel cc-task-list,
+.cti-panel cc-incoming-task {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Fix Momentum UI components inside CTI panel */
+.cti-panel mdc-button,
+.cti-panel mdc-select,
+.cti-panel .md-button,
+.cti-panel .md-select {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Fix Station Login widget */
+.cti-panel cc-station-login > div,
+.cti-panel cc-station-login form {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Fix User State widget */
+.cti-panel cc-user-state select,
+.cti-panel cc-user-state mdc-select {
+  width: 100% !important;
+}
+
+/* Fix Task List items */
+.cti-panel cc-task-list > div {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+/* Fix Incoming Task widget - ensure buttons are visible */
+.cti-panel cc-incoming-task {
+  min-height: 140px !important;
+}
+
+.cti-panel cc-incoming-task button,
+.cti-panel cc-incoming-task mdc-button {
+  margin: 4px !important;
+  white-space: nowrap !important;
+}
+
+/* Fix button groups in widgets */
+.cti-panel .button-group,
+.cti-panel [class*="button-container"] {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+
+/* Ensure text doesn't overflow */
+.cti-panel * {
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+/* Fix for Web Components shadow DOM */
+.cti-panel::part(button),
+.cti-panel::part(container) {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
