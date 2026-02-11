@@ -73,7 +73,7 @@ function App() {
   };
 
   return (
-    <div className="crm-app">
+    <div className="crm-app mds-typography mdc-typography">
       <ThemeProvider themeclass="mds-theme-stable-lightWebex">
         <IconProvider
           iconSet="custom-icons"

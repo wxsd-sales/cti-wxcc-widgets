@@ -1038,12 +1038,6 @@ body {
   }
 }
 
-/* When both widgets are visible, offset task list above call control */
-.floating-call-control ~ .floating-task-list,
-.floating-task-list:has(~ .floating-call-control) {
-  /* This won't work in all browsers, so we'll use a simpler approach */
-}
-
 /* Scrollbar styling for task list */
 .floating-panel-content::-webkit-scrollbar {
   width: 6px;
