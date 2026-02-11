@@ -600,7 +600,7 @@ body {
   position: fixed;
   bottom: 24px;
   left: 24px;
-  width: 400px;
+  width: 600px;
   max-width: calc(100vw - 48px);
   background: white;
   border-radius: 16px;
@@ -914,7 +914,7 @@ body {
 .floating-call-control {
   position: fixed;
   bottom: 24px;
-  left: 50%;
+  left: 86%;
   transform: translateX(-50%);
   min-width: 420px;
   background: white;
@@ -924,8 +924,8 @@ body {
     0 2px 8px rgba(0, 0, 0, 0.1),
     0 0 0 2px rgba(231, 76, 60, 0.2);
   z-index: 1001;
-  overflow: hidden;
-  animation: slideInUp 0.25s ease-out, pulseGlow 2s ease-in-out infinite;
+  /* overflow: hidden; */
+  /* animation: slideInUp 0.25s ease-out, pulseGlow 2s ease-in-out infinite; */
 }
 
 .floating-call-control .call-control-header {
